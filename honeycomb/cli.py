@@ -1,0 +1,71 @@
+import os
+import sys
+from typing import override
+
+import click
+from click.shell_completion import CompletionItem
+
+from honeycomb import project as honeycomb_project
+from honeycomb import tmux, workspaces
+from honeycomb.config import read_config
+from honeycomb.model import HoneyCombProject, HoneyCombWorkspace
+
+
+@click.group()
+def cli() -> None:
+  pass
+
+
+# @cli.command("list-sessions")
+# def list_sessions() -> None:
+#   sessions = tmux.list_sessions()
+#   for session in sessions:
+#     print(session)
+#
+
+
+def list_available_projects_from_config() -> set[HoneyCombProject]:
+  config = read_config()
+  return workspaces.list_workspaces(
+    HoneyCombWorkspace(config.workspace_path),
+    additional_search_paths=config.additional_search_paths,
+    workspace_markers=config.workspace_markers,
+  )
+
+
+@cli.command("list-projects")
+def list_projects() -> None:
+  available_projects = list_available_projects_from_config()
+  for workspace in sorted(available_projects, key=lambda x: x.human_friendly_name.lower()):
+    print(workspace.human_friendly_name)
+
+
+class ProjectVarType(click.ParamType):
+  name = "project"
+
+  @override
+  def shell_complete(self, ctx: click.Context, param: click.Parameter, incomplete: str) -> list[CompletionItem]:
+    return [
+      CompletionItem(p.human_friendly_name)
+      for p in list_available_projects_from_config()
+      if p.human_friendly_name.startswith(incomplete)
+    ]
+
+
+@cli.command("attach")
+@click.argument("project", type=ProjectVarType())
+def join_session(project: str) -> None:
+  available_projects = list_available_projects_from_config()
+  matching_project = next(iter([p for p in available_projects if p.human_friendly_name == project]), None)
+  if matching_project is None:
+    print(f"Project {project} does not exist in workspace")
+    sys.exit(1)
+  current_tmux_sessions = tmux.list_sessions()
+  possible_session = current_tmux_sessions.get_session_for_project(matching_project)
+  if possible_session is None:
+    possible_session = honeycomb_project.start_new_project(matching_project)
+
+  if "TMUX" in os.environ:
+    tmux.switch_client(possible_session)
+  else:
+    tmux.attach(possible_session)

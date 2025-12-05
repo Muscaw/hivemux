@@ -1,0 +1,32 @@
+[project]
+name = "honeycomb"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "click>=8.3.1",
+]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.14.6",
+]
+
+[project.scripts]
+comb = "honeycomb.cli:cli"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["honeycomb"]
+namespaces = false
+
+[tool.ruff]
+# Target Python version
+target-version = "py312"
+
+# Line length to match black's default
+line-length = 120
+
+indent-width = 2
+
