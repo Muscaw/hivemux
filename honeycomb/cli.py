@@ -54,6 +54,16 @@ class ProjectVarType(click.ParamType):
 
 @cli.command("attach")
 @click.argument("project", type=ProjectVarType())
+def attach(project: str) -> None:
+  join_session(project)
+
+
+@cli.command("a")
+@click.argument("project", type=ProjectVarType())
+def a(project: str) -> None:
+  join_session(project)
+
+
 def join_session(project: str) -> None:
   available_projects = list_available_projects_from_config()
   matching_project = next(iter([p for p in available_projects if p.human_friendly_name == project.lower()]), None)
