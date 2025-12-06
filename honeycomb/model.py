@@ -2,13 +2,15 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from pathlib import Path
-from typing import override
 
 SESSION_PREFIX = "comb_"
 
+REPLACED_CHARS = [".", ":"]
 
 def _cleanup_session_name(session_name: str) -> str:
-  return session_name.replace(".", "_")
+  for char in REPLACED_CHARS:
+    session_name = session_name.replace(char, "_")
+  return session_name
 
 
 @dataclass(frozen=True)
@@ -34,7 +36,7 @@ class HoneyCombSession:
 
   @staticmethod
   def from_project_name(value: HoneyCombProjectName) -> HoneyCombSession:
-    return HoneyCombSession(value.value)
+    return HoneyCombSession(_cleanup_session_name(value.value))
 
 class HoneyCombSessionsContainsNonHoneyCombSessions(Exception):
   pass
