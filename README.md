@@ -14,6 +14,8 @@ What HoneyComb provides:
 
 HoneyComb can be configured through a TOML file in `$HOME/.config/honeycomb/config.toml`.
 
+If you have `XDG_CONFIG_HOME` or `XDG_CONFIG_DIRS` set, HoneyComb will look in these locations as described in the [XDG specification](https://specifications.freedesktop.org/basedir/latest/#basics).
+
 _config.toml_
 ```toml
 # Path to your workspace containing all your projects
