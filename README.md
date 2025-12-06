@@ -15,7 +15,7 @@ What HoneyComb provides:
 HoneyComb can be configured through a TOML file in `$HOME/.config/honeycomb/config.toml`.
 
 _config.toml_
-```
+```toml
 # Path to your workspace containing all your projects
 workspace_path: "~/workspace"
 # Pattern to match to find all the projects in the first level of your workspace folder. Must match Python's Path.glob() definition https://docs.python.org/3/library/pathlib.html#pathlib.Path.glob
@@ -38,7 +38,7 @@ additional_search_paths: []
 
 In your .zshrc, add the following line.
 
-```
+```bash
 eval "$(_COMB_COMPLETE=zsh_source comb)"
 ```
 
@@ -46,6 +46,6 @@ eval "$(_COMB_COMPLETE=zsh_source comb)"
 
 In your .bashrc, add the following line.
 
-```
+```bash
 eval "$(_COMB_COMPLETE=bash_source comb)"
 ```
