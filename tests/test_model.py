@@ -2,7 +2,14 @@ from pathlib import Path
 
 import pytest
 
-from honeycomb.model import HoneyCombProjectName, HoneyCombSession
+from honeycomb.model import (
+  CouldNotListWorkspacesException,
+  HoneyCombProject,
+  HoneyCombProjectName,
+  HoneyCombSession,
+  HoneyCombWorkspace,
+  ProjectIsNotDirectoryException,
+)
 
 
 class TestHoneyCombSession:
@@ -42,3 +49,24 @@ class TestHoneyCombSession:
 
     with pytest.raises(ValueError):
       _ = HoneyCombSession.from_session_name(session_name_without_prefix)
+
+
+class TestHoneyCombWorkspace:
+  def test_create_workspace_raises_with_non_directory(self) -> None:
+    with pytest.raises(CouldNotListWorkspacesException):
+      _ = HoneyCombWorkspace(Path(__file__))
+
+  def test_create_workspace_from_folder(self) -> None:
+    path = Path(__file__).parent
+    workspace = HoneyCombWorkspace(path)
+    assert workspace.path == path
+
+
+class TestHoneyCombProject:
+  def test_project_does_not_point_to_folder_raises(self) -> None:
+    with pytest.raises(ProjectIsNotDirectoryException):
+      _ = HoneyCombProject(Path(__file__), HoneyCombProjectName("some_project"))
+
+  def test_project_points_to_correct_folder(self) -> None:
+    project = HoneyCombProject(Path(__file__).parent, HoneyCombProjectName("project_name"))
+    assert project.derive_session_name() == HoneyCombSession("tests")
