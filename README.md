@@ -21,16 +21,16 @@ HoneyComb works well without a config file set, by default, it acts with the def
 _config.toml_
 ```toml
 # Path to your workspace containing all your projects
-workspace_path: "~/workspace"
+workspace_path = "~/workspace"
 
 # Pattern to match to find all the projects in the first level of your workspace folder. Must match Python's Path.glob() definition https://docs.python.org/3/library/pathlib.html#pathlib.Path.glob
-workspace_markers: ["*/.git"]
+workspace_markers = ["*/.git"]
 
 # Additional search paths to add to your list of projects. The list is taken as-is and added to the project list.
-additional_search_paths: []
+additional_search_paths = []
 
 # .combrc file used to define how to create the session for all projects
-combrc: """
+combrc = """
   new-session -d -c {{cwd}} -s {{session}} -n source nvim .
   new-window -t {{session}} -n shell
   select-window -t {{session}}:source
