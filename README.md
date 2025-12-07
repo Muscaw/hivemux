@@ -32,7 +32,7 @@ additional_search_paths = []
 # .combrc file used to define how to create the session for all projects
 combrc = """
   new-session -d -c {{cwd}} -s {{session}} -n source nvim .
-  new-window -t {{session}} -n shell
+  new-window -c {{cwd}} -t {{session}} -n shell
   select-window -t {{session}}:source
 """
 ```

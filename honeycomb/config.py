@@ -13,7 +13,7 @@ class Config:
   additional_search_paths: list[Path] = field(default_factory=lambda: [])
   workspace_markers: list[str] = field(default_factory=lambda: ["*/.git"])
   combrc: str = """new-session -d -c {{cwd}} -s {{session}} -n source nvim .
-  new-window -t {{session}} -n shell
+  new-window -c {{cwd}} -t {{session}} -n shell
   select-window -t {{session}}:source
   """
 
