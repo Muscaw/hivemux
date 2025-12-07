@@ -5,6 +5,15 @@ if ! [[ "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
   exit 1
 fi
 
+# Verify we are not downgrading the version
+
+current_version=$(uv version --short)
+
+if [[ $(printf "%s\n%s\n" "$version" "$current_version" | sort -V | head -1) == "$version" ]]; then
+  echo "$version is a downgrade or same as current version $current_version"
+  exit 1
+fi
+
 # Verify we are currently at the top of the main branch
 
 git fetch origin main
