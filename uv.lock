@@ -25,7 +25,7 @@ wheels = [
 
 [[package]]
 name = "honeycomb-cli"
-version = "0.2.0"
+version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
     { name = "click" },
