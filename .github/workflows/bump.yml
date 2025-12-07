@@ -1,0 +1,32 @@
+name: Bump version
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "New tag version in the form of x.y.z"
+        type: string
+        required: true
+
+jobs:
+  bump:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: extractions/setup-just
+      
+      - name: Run tests
+        run: just test
+
+      - name: Bump version and create tag
+        run: uv version ${{ inputs.version }}
+
+      - name: Commit changes
+        run: git add pyproject.toml uv.lock && git commit -m "Bump project version to ${{inputs.version}}"
+
+      - name: Create tag
+        run: git tag
+
+      - name: Push changes
+        run: git push --tags
