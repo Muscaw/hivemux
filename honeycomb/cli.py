@@ -7,6 +7,7 @@ from click.shell_completion import CompletionItem
 
 from honeycomb import project as honeycomb_project
 from honeycomb import tmux, workspaces
+from honeycomb import config
 from honeycomb.config import read_config
 from honeycomb.model import HoneyCombProject, HoneyCombWorkspace
 
@@ -65,6 +66,8 @@ def a(project: str) -> None:
 
 
 def join_session(project: str) -> None:
+  conf = config.read_config()
+  project_manager = honeycomb_project.ProjectManager(conf)
   available_projects = list_available_projects_from_config()
   matching_project = next(iter([p for p in available_projects if p.human_friendly_name == project.lower()]), None)
   if matching_project is None:
@@ -73,7 +76,7 @@ def join_session(project: str) -> None:
   current_tmux_sessions = tmux.list_sessions()
   possible_session = current_tmux_sessions.get_session_for_project(matching_project)
   if possible_session is None:
-    possible_session = honeycomb_project.start_new_project(matching_project)
+    possible_session = project_manager.start_new_project(matching_project)
 
   if "TMUX" in os.environ:
     tmux.switch_client(possible_session)

@@ -1,6 +1,7 @@
 import os
 import subprocess
 from pathlib import Path
+from tempfile import NamedTemporaryFile
 
 from honeycomb.model import HoneyCombSession, HoneyCombSessions
 
@@ -52,6 +53,18 @@ def list_sessions() -> HoneyCombSessions:
   return HoneyCombSessions(
     [HoneyCombSession.from_session_name(x) for x in sessions if HoneyCombSession.is_honeycomb_session(x)]
   )
+
+
+def source_tmux_file(tmux_commands: str) -> None:
+  with NamedTemporaryFile(
+    "w",
+    delete_on_close=False,
+    delete=False,
+  ) as f:
+    _ = f.write(tmux_commands)
+    f.flush()
+    res = subprocess.run(["tmux", "source-file", str(Path(f.name).absolute())])
+    res.check_returncode()
 
 
 def switch_client(session_name: HoneyCombSession) -> None:

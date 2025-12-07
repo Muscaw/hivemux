@@ -12,6 +12,10 @@ class Config:
   workspace_path: Path = Path.home() / "workspace"
   additional_search_paths: list[Path] = field(default_factory=lambda: [])
   workspace_markers: list[str] = field(default_factory=lambda: ["*/.git"])
+  combrc: str = """new-session -d -c {{cwd}} -s {{session}} -n source nvim .
+  new-window -t {{session}} -n shell
+  select-window -t {{session}}:source
+  """
 
   @staticmethod
   def from_dict(data: dict[str, Any]) -> Config:  # pyright: ignore[reportExplicitAny]
@@ -22,6 +26,8 @@ class Config:
       config_data["additional_search_paths"] = [Path(os.path.expanduser(d)) for d in data["additional_search_paths"]]  # pyright: ignore[reportAny]
     if "workspace_markers" in data:
       config_data["workspace_markers"] = data["workspace_markers"]
+    if "combrc" in data:
+      config_data["combrc"] = data["combrc"]
     return Config(**config_data)  # pyright: ignore[reportUnknownArgumentType]
 
 
@@ -49,4 +55,3 @@ def read_config() -> Config:
       return Config.from_dict(read_config)
   # No match, so we return a default config file
   return Config()
-
