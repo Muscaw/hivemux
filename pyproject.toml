@@ -1,6 +1,6 @@
 [project]
-name = "honeycomb-cli"
-version = "0.1.0"
+name = "hivemux"
+version = "0.0.1"
 description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.13"
@@ -16,11 +16,11 @@ dev = [
 ]
 
 [project.scripts]
-comb = "honeycomb.cli:cli"
+hm = "hivemux.cli:cli"
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["honeycomb"]
+include = ["hivemux"]
 namespaces = false
 
 [tool.ruff]

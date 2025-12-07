@@ -5,11 +5,11 @@ from typing import override
 import click
 from click.shell_completion import CompletionItem
 
-from honeycomb import project as honeycomb_project
-from honeycomb import tmux, workspaces
-from honeycomb import config
-from honeycomb.config import read_config
-from honeycomb.model import HoneyCombProject, HoneyCombWorkspace
+from hivemux import project as hivemux_project
+from hivemux import tmux, workspaces
+from hivemux import config
+from hivemux.config import read_config
+from hivemux.model import HivemuxProject, HivemuxWorkspace
 
 
 @click.group()
@@ -25,10 +25,10 @@ def cli() -> None:
 #
 
 
-def list_available_projects_from_config() -> set[HoneyCombProject]:
+def list_available_projects_from_config() -> set[HivemuxProject]:
   config = read_config()
   return workspaces.list_workspaces(
-    HoneyCombWorkspace(config.workspace_path),
+    HivemuxWorkspace(config.workspace_path),
     additional_search_paths=config.additional_search_paths,
     workspace_markers=config.workspace_markers,
   )
@@ -67,7 +67,7 @@ def a(project: str) -> None:
 
 def join_session(project: str) -> None:
   conf = config.read_config()
-  project_manager = honeycomb_project.ProjectManager(conf)
+  project_manager = hivemux_project.ProjectManager(conf)
   available_projects = list_available_projects_from_config()
   matching_project = next(iter([p for p in available_projects if p.human_friendly_name == project.lower()]), None)
   if matching_project is None:

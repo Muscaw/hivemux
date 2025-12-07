@@ -12,7 +12,7 @@ class Config:
   workspace_path: Path = Path.home() / "workspace"
   additional_search_paths: list[Path] = field(default_factory=lambda: [])
   workspace_markers: list[str] = field(default_factory=lambda: ["*/.git"])
-  combrc: str = """new-session -d -c {{cwd}} -s {{session}} -n source nvim .
+  hmrc: str = """new-session -d -c {{cwd}} -s {{session}} -n source nvim .
   new-window -c {{cwd}} -t {{session}} -n shell
   select-window -t {{session}}:source
   """
@@ -26,8 +26,8 @@ class Config:
       config_data["additional_search_paths"] = [Path(os.path.expanduser(d)) for d in data["additional_search_paths"]]  # pyright: ignore[reportAny]
     if "workspace_markers" in data:
       config_data["workspace_markers"] = data["workspace_markers"]
-    if "combrc" in data:
-      config_data["combrc"] = data["combrc"]
+    if "hmrc" in data:
+      config_data["hmrc"] = data["hmrc"]
     return Config(**config_data)  # pyright: ignore[reportUnknownArgumentType]
 
 
@@ -47,7 +47,7 @@ def get_config_possible_paths() -> list[Path]:
 def read_config() -> Config:
   possible_paths = get_config_possible_paths()
   for possible_path in possible_paths:
-    config_path = possible_path / "honeycomb" / "config.toml"
+    config_path = possible_path / "hivemux" / "config.toml"
     if not config_path.exists():
       continue
     with open(config_path, "rb") as file:

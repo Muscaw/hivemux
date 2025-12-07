@@ -2,10 +2,10 @@ test:
   uv run python -m pytest
 
 list:
-  uv run python -m honeycomb list-projects
+  uv run python -m hivemux list-projects
 
 attach project:
-  uv run python -m honeycomb attach {{project}}
+  uv run python -m hivemux attach {{project}}
 
 check:
   uv run ruff format --check
